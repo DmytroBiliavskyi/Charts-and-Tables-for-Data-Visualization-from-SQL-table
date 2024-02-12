@@ -21,6 +21,7 @@ router.post("/v1", async (req, res) => {
   const { rows } = await db.query(`
     SELECT 
       product_title,
+      product_link,
       calculated_brand,
       calculated_tool_type,
       price,
@@ -50,6 +51,7 @@ router.post("/v2", async (req, res) => {
   const { rows } = await db.query(`
     SELECT 
       product_title,
+      product_link,
       calculated_brand,
       calculated_tool_type,
       price,
@@ -90,6 +92,7 @@ router.post("/v3", async (req, res) => {
   const { rows } = await db.query(`
     SELECT 
       product_title,
+      product_link,
       calculated_brand,
       calculated_tool_type,
       price,

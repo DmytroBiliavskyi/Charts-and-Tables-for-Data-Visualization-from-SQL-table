@@ -11,6 +11,18 @@ const ItemInfoTable = ({ itemList }) => {
       {
         Header: "Product Title",
         accessor: "product_title",
+        Cell: ({ row }) => {
+          // eslint-disable-next-line
+          const item = row?.original;
+          return (
+            <Typography
+              onClick={() => window.open(item?.product_link, "_blank")}
+              sx={{ textDecoration: "underline", cursor: "pointer" }}
+            >
+              {item?.product_title}
+            </Typography>
+          );
+        },
       },
       {
         Header: "Product Brand",
