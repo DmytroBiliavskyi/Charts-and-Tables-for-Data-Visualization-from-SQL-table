@@ -71,10 +71,13 @@ const ItemInfoChart = ({ itemList }) => {
         }),
       },
       {
-        name: "Number of Rows",
+        name: "Number of Items",
         type: "column",
         data: metrics?.map((item) => {
-          return { y: item?.item_count, x: formatDate(item?.sold_date) };
+          return {
+            y: parseInt(item?.item_count),
+            x: formatDate(item?.sold_date),
+          };
         }),
       },
     ],
