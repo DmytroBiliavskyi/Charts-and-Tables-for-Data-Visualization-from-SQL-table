@@ -57,9 +57,9 @@ export const ProductProvider = ({ children }) => {
   }, []);
 
   // only brand
-  const getItemInfoV2 = useCallback(async (brand) => {
+  const getItemInfoV2 = useCallback(async (brandList) => {
     try {
-      const res = await axios.post("/iteminfo/v2", { brand });
+      const res = await axios.post("/iteminfo/v2", { brandList });
       return res?.data;
     } catch (err) {
       console.error(err);
@@ -68,9 +68,9 @@ export const ProductProvider = ({ children }) => {
   }, []);
 
   // brand and tool types
-  const getItemInfoV3 = useCallback(async (brand, toolTypeList) => {
+  const getItemInfoV3 = useCallback(async (brandList, toolTypeList) => {
     try {
-      const res = await axios.post("/iteminfo/v3", { brand, toolTypeList });
+      const res = await axios.post("/iteminfo/v3", { brandList, toolTypeList });
       return res?.data;
     } catch (err) {
       console.error(err);

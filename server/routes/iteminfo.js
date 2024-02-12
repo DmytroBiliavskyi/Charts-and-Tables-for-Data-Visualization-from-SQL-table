@@ -42,11 +42,16 @@ router.post("/v1", async (req, res) => {
 // only brand
 router.post("/v2", async (req, res) => {
   const start = Date.now();
-  const brand = req.body.brand;
-  const where =
-    brand !== "Unrecognized"
-      ? `brand = '${brand}' or calculated_brand='${brand}'`
-      : `calculated_brand IS NULL`;
+
+  const brandList = req.body.brandList;
+  let brandwhere = "";
+  brandList?.forEach((item) => {
+    brandwhere +=
+      item !== "Unrecognized"
+        ? `brand = '${item}' or calculated_brand = '${item}' or `
+        : `brand IS NULL or calculated_brand IS NULL or `;
+  });
+  brandwhere = brandwhere.substring(0, brandwhere?.length - 4);
 
   const { rows } = await db.query(`
     SELECT 
@@ -62,7 +67,7 @@ router.post("/v2", async (req, res) => {
     FROM 
       item_info
     WHERE 
-      ${where};
+      ${brandwhere};
   `);
   const duration = Date.now() - start;
   console.log("item info v2 query", { duration, rows: rows.length });
@@ -73,11 +78,15 @@ router.post("/v2", async (req, res) => {
 router.post("/v3", async (req, res) => {
   const start = Date.now();
 
-  const brand = req.body.brand;
-  const brandWhere =
-    brand !== "Unrecognized"
-      ? `brand = '${brand}' or calculated_brand='${brand}'`
-      : `calculated_brand IS NULL`;
+  const brandList = req.body.brandList;
+  let brandwhere = "";
+  brandList?.forEach((item) => {
+    brandwhere +=
+      item !== "Unrecognized"
+        ? `brand = '${item}' or calculated_brand = '${item}' or `
+        : `brand IS NULL or calculated_brand IS NULL or `;
+  });
+  brandwhere = brandwhere.substring(0, brandwhere?.length - 4);
 
   const toolTypeList = req.body.toolTypeList;
   let toolTypewhere = "";
@@ -103,7 +112,7 @@ router.post("/v3", async (req, res) => {
     FROM 
       item_info
     WHERE 
-      (${toolTypewhere}) and (${brandWhere});
+      (${toolTypewhere}) and (${brandwhere});
   `);
   const duration = Date.now() - start;
   console.log("item info v3 query", { duration, rows: rows.length });

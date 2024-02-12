@@ -20,7 +20,7 @@ const App = () => {
     getItemInfoV2,
     getItemInfoV3,
   } = useProduct();
-  const [selectedBrand, setSelectedBrand] = useState("");
+  const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedToolTypes, setSelectedToolTypes] = useState([]);
 
   const [loading, setLoading] = useState(null);
@@ -28,21 +28,21 @@ const App = () => {
   const [itemList, setItemList] = useState([]);
 
   const handleGetItemInfo = async () => {
-    if (!selectedBrand && selectedToolTypes?.length === 0) return;
+    if (selectedBrands?.length === 0 && selectedToolTypes?.length === 0) return;
     setLoading(true);
-    if (!selectedBrand) {
+    if (selectedBrands?.length === 0) {
       const result = await getItemInfoV1(selectedToolTypes);
       setItemList(result);
       setLoading(false);
       return;
     }
     if (selectedToolTypes?.length === 0) {
-      const result = await getItemInfoV2(selectedBrand);
+      const result = await getItemInfoV2(selectedBrands);
       setItemList(result);
       setLoading(false);
       return;
     }
-    const result = await getItemInfoV3(selectedBrand, selectedToolTypes);
+    const result = await getItemInfoV3(selectedBrands, selectedToolTypes);
     setItemList(result);
     setLoading(false);
     return;
@@ -68,7 +68,7 @@ const App = () => {
                   variant="contained"
                   size="large"
                   disableElevation
-                  disabled={!selectedBrand && selectedToolTypes?.length === 0}
+                  disabled={!selectedBrands && selectedToolTypes?.length === 0}
                   onClick={handleGetItemInfo}
                 >
                   Apply
@@ -83,9 +83,16 @@ const App = () => {
                     <Typography>Brand Filter</Typography>
                     <Select
                       size="small"
-                      fullWidth
-                      value={selectedBrand}
-                      onChange={(e) => setSelectedBrand(e.target.value)}
+                      multiple
+                      value={selectedBrands}
+                      onChange={(e) => {
+                        const {
+                          target: { value },
+                        } = e;
+                        setSelectedBrands(
+                          typeof value === "string" ? value.split(",") : value
+                        );
+                      }}
                       MenuProps={{
                         PaperProps: {
                           style: { maxHeight: 300, maxWidth: 300 },
@@ -94,11 +101,21 @@ const App = () => {
                           disablePadding: true,
                         },
                       }}
+                      sx={{ width: "-webkit-fill-available" }}
                     >
                       {brandList
+                        ?.filter((item) => item?.brand_option !== "")
                         ?.sort((a, b) => {
-                          if (a?.brand_option > b?.brand_option) return 1;
-                          if (a?.brand_option < b?.brand_option) return -1;
+                          if (
+                            (a?.brand_option || "Unrecognized") >
+                            (b?.brand_option || "Unrecognized")
+                          )
+                            return 1;
+                          if (
+                            (a?.brand_option || "Unrecognized") <
+                            (b?.brand_option || "Unrecognized")
+                          )
+                            return -1;
                           return 0;
                         })
                         ?.map((brand, idx) => {
@@ -118,7 +135,7 @@ const App = () => {
                     size="large"
                     disableElevation
                     onClick={() => {
-                      setSelectedBrand("");
+                      setSelectedBrands([]);
                     }}
                   >
                     Clear
@@ -151,9 +168,15 @@ const App = () => {
                     >
                       {toolTypeList
                         ?.sort((a, b) => {
-                          if (a?.calculated_tool_type > b?.calculated_tool_type)
+                          if (
+                            (a?.calculated_tool_type || "Unrecognized") >
+                            (b?.calculated_tool_type || "Unrecognized")
+                          )
                             return 1;
-                          if (a?.calculated_tool_type < b?.calculated_tool_type)
+                          if (
+                            (a?.calculated_tool_type || "Unrecognized") <
+                            (b?.calculated_tool_type || "Unrecognized")
+                          )
                             return -1;
                           return 0;
                         })
