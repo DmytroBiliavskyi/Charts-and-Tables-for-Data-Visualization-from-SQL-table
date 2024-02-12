@@ -141,6 +141,16 @@ const ItemInfoChart = ({ itemList }) => {
         borderWidth: 0,
       },
     },
+    tooltip: {
+      y: {
+        formatter: function (val, { seriesIndex, dataPointIndex, w }) {
+          if (w.globals.seriesNames[seriesIndex] === "Number of Items") {
+            return parseInt(val);
+          }
+          return val;
+        },
+      },
+    },
   };
 
   const getWidth = useCallback(() => {
