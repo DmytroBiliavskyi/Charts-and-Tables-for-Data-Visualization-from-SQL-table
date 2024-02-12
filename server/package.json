@@ -1,0 +1,28 @@
+{
+  "name": "chart-and-tables-for-data-visualization-from-sql-table",
+  "version": "1.0.0",
+  "description": "Node.js Rest Apis with Express, Sequelize & PostgreSQL",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "sequelize",
+    "rest",
+    "api",
+    "postgresql"
+  ],
+  "author": "Dmytro",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-promise-router": "^4.1.1",
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.36.0"
+  }
+}
