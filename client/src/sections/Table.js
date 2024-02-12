@@ -27,7 +27,11 @@ const ItemInfoTable = ({ itemList }) => {
       {
         Header: "Product Brand",
         accessor: "calculated_brand",
-        Cell: ({ value }) => value || "Unrecognized",
+        Cell: ({ row }) => {
+          // eslint-disable-next-line
+          const item = row?.original;
+          return item?.brand || item?.calculated_brand || "Unrecognized";
+        },
       },
       {
         Header: "Tool Type",
@@ -67,7 +71,7 @@ const ItemInfoTable = ({ itemList }) => {
         const searchPattern = normalizeString(pattern);
         const product_title = normalizeString(item?.product_title);
         const calculated_brand = normalizeString(
-          item?.calculated_brand || "Unrecognized"
+          item?.brand || item?.calculated_brand || "Unrecognized"
         );
         const calculated_tool_type = normalizeString(
           item?.calculated_tool_type || "Unrecognized"
