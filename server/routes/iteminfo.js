@@ -49,10 +49,12 @@ router.post("/v2", async (req, res) => {
   brandList?.forEach((item) => {
     brandwhere +=
       item !== "Unrecognized"
-        ? `brand = '${item}' or calculated_brand = '${item}' or `
-        : `brand IS NULL or calculated_brand IS NULL or `;
+        ? `brand = '${item}' or ((brand IS NULL or brand = '') and calculated_brand = '${item}') or `
+        : `(brand = '' or brand IS NULL) and (calculated_brand = '' or calculated_brand IS NULL) or `;
   });
   brandwhere = brandwhere.substring(0, brandwhere?.length - 4);
+
+  console.log(brandwhere);
 
   const { rows } = await db.query(`
     SELECT 
@@ -85,8 +87,8 @@ router.post("/v3", async (req, res) => {
   brandList?.forEach((item) => {
     brandwhere +=
       item !== "Unrecognized"
-        ? `brand = '${item}' or calculated_brand = '${item}' or `
-        : `brand IS NULL or calculated_brand IS NULL or `;
+        ? `brand = '${item}' or ((brand IS NULL or brand = '') and calculated_brand = '${item}') or `
+        : `(brand = '' or brand IS NULL) and (calculated_brand = '' or calculated_brand IS NULL) or `;
   });
   brandwhere = brandwhere.substring(0, brandwhere?.length - 4);
 
