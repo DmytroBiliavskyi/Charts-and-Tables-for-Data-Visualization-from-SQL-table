@@ -54,8 +54,6 @@ router.post("/v2", async (req, res) => {
   });
   brandwhere = brandwhere.substring(0, brandwhere?.length - 4);
 
-  console.log(brandwhere);
-
   const { rows } = await db.query(`
     SELECT 
       product_title,
